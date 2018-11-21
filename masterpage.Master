@@ -1,0 +1,43 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="masterpage.master.cs" Inherits="Revolution_.masterpage" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <link href="bootstrap-3.3.7-dist/css/bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="BookExchange_StyleSheet.css"/>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <nav class="navbar navbar-inverse">
+             <div class="container-fluid">
+                  <div class="navbar-header">
+                        <a href="#" class="navbar-brand">BOOKEXCHANGE</a>
+                   </div>
+                   <div>
+                       <ul class="nav navbar-nav">
+                           <li ><a href="HomePage.aspx">Home</a></li>
+                           <li><a href="#">About</a></li>
+                           <li><a href="#">Contact</a></li>
+                       </ul>
+
+                       <ul class="nav navbar-nav navbar-right">
+                           <li><a href="LoginPage.aspx">Login</a></li>
+                           <li><a href="RegistrationPage.aspx">Register</a></li>
+                       </ul>
+                   </div>
+             </div>
+        </nav>
+    <div>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        
+        </asp:ContentPlaceHolder>
+    </div>
+    </form>
+</body>
+</html>
