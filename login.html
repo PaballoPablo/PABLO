@@ -1,0 +1,84 @@
+<?php
+session_start();
+include("connection.php"); //Establishing connection with our database
+$error = ""; //Variable for storing our errors.
+if(isset($_POST["submit"]))
+{
+  if(empty($_POST["email"]) || empty($_POST["password"]))
+  {
+    $error = "Both fields are required.";
+  }
+  else
+  {
+    // Define $email and $password
+    $email=$_POST['email'];
+    $password=$_POST['password'];
+    // To protect from MySQL injection
+    $email = stripslashes($email);
+    $password = stripslashes($password);
+    $email = mysqli_real_escape_string($db, $email);
+    $password = mysqli_real_escape_string($db, $password);
+    $password = md5($password);
+    //Check username and password from database
+    $sql="SELECT * FROM company WHERE email='$email' and password='$password'";
+    $result=mysqli_query($db,$sql);
+    $row=mysqli_fetch_array($result,MYSQLI_ASSOC);
+    //If username and password exists in our database then create a session.
+    //Otherwise echo error.
+    if(mysqli_num_rows($result) == 1)
+    {
+      $_SESSION['email'] = $row['email']; // Initializing Session
+      header("location: home.php"); // Redirecting To Other Page
+    }
+	else
+    {
+      $error = "Incorrect username or password.";
+    }
+  }
+}
+  if(isset($_SESSION['email']) != '') 
+  {
+    header('Location: home.php');
+  }
+?>
+
+<!DOCTYPE html>
+  
+ <html>
+<head>
+<meta charset="utf-8">
+  <title>Login</title>
+  <link rel="stylesheet" type="text/css" href="css/Style.css"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css"/>
+</head>
+   
+   <body style="background-image:url(images/gym.jpg);">
+   
+   <nav class="navbar navbar-inverse">
+             <div class="container-fluid">
+                       <ul class="nav navigation-left">
+                            <li><a href="#" class="navbar-brand">Finnessers Online Gym Equipment</a></li>
+                            <li><a href="home.php">Home</a></li>
+                            <li><a href="About.php">About</a></li>
+                            <li><a href="ContactPage.php">Contact</a></li>
+                            <li><a href="ProductsPage.php">Shopping</a></li>
+                            <li><a href="TrainerPage.php">Trainers</a></li>
+                           <li style="float:right"><a href="login.php">Login</a></li>
+                           <li class="right"><a href="registration.php">Register</a></li>
+                       </ul>
+             </div>       
+        </nav>
+   
+    <form method="post" action="">
+		<div class="container">
+			<div class="login-group">
+			<input class="form-control" type="text" name="email" placeholder="email" /><br><br>
+			<input class="form-control" type="password" name="password" placeholder="password" />  <br><br>
+			<input type="checkbox" name="remember" placeholder="remember" />Remember Me?<br><br>
+			<input type="submit" name="submit" value="Login" />
+			<div>
+		</div>
+	</form>
+	</body>
+	</html>

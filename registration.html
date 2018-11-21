@@ -1,0 +1,128 @@
+<?php
+	include ("dbconn.php");	
+	$msg = "";
+	if(isset($_POST["submit"]))
+	{
+		if(empty($_POST["name"]) || empty($_POST["email"]) || empty($_POST["password"]) || empty($_POST["comfirm"]))
+        {
+          $msg = "All fields are required!";
+        }
+		else
+		{
+	      $name = $_POST["name"];
+		  $email = $_POST["email"];
+		  $password = $_POST["password"];
+		  $repassword = $_POST["comfirm"];
+          if(strcmp($password,$comfirm)!=0)
+		  {
+		    $msg = "Password mismatch!";
+		  }
+		  else
+		  {
+			$name = mysqli_real_escape_string($db, $name);
+		    $email = mysqli_real_escape_string($db, $email);
+		    $password = mysqli_real_escape_string($db, $password);
+		    $password = md5($password);
+			$sql="SELECT email FROM company WHERE email='$email'";
+		    $result=mysqli_query($db,$sql);
+		    $row=mysqli_fetch_array($result,MYSQLI_ASSOC);
+		    if(mysqli_num_rows($result) == 1)
+		    {
+			   $msg = "Oops...This email already exists... Try login instead";
+		    }
+		    else
+		    {
+			   $query = mysqli_query($db, "INSERT INTO company (name, email, password)VALUES ('$name', '$email', '$password')");
+			  if($query)
+			  {
+				$msg = "Congratulations! you are now registered.";
+			  }
+		    }
+		  }
+		}
+	}
+?>
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+  <title>Registration</title>
+  <link rel="stylesheet" type="text/css" href="css/Style.css"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css"/>
+</head>
+<body style="background-color:black;">
+	<nav class="navbar navbar-inverse">
+             <div class="container-fluid">
+                       <ul class="nav navigation-left">
+                            <li><a href="#" class="navbar-brand">Finnessers Online Gym Equipment</a></li>
+                            <li><a href="home.php">Home</a></li>
+                            <li><a href="About.php">About</a></li>
+                            <li><a href="ContactPage.php">Contact</a></li>
+                            <li><a href="ProductsPage.php">Shopping</a></li>
+                            <li><a href="TrainerPage.php">Trainers</a></li>
+                   
+                           <li style="float:right"><a href="login.php">Login</a></li>
+                           <li class="right"><a href="registration.php">Register</a></li>
+                       </ul>
+
+             </div>
+            
+        </nav>
+  
+  <form method="post" action="">
+	<div class ="container">
+								<h2>Sign Up</h2>
+							<div class="form-group">
+							<label for="name" class="cols-sm-2 control-label">Your Name:</label>
+							<div class="cols-sm-10">
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+									<input type="text" class="form-control" name="name" id="name"  placeholder="Enter your Name"/>
+								</div>
+							</div>
+						</div>
+	<div class="form-group">
+							<label for="name" class="cols-sm-2 control-label">Email Address:</label>
+							<div class="cols-sm-10">
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+									<input type="email" class="form-control" name="email" id="email"  placeholder="Enter your email"/>
+								</div>
+							</div>
+						</div>
+	<div class="form-group">
+							<label for="name" class="cols-sm-2 control-label">Password:</label>
+							<div class="cols-sm-10">
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+									<input type="password" class="form-control" name="password" id="password"  placeholder="enter password"/>
+								</div>
+							</div>
+						</div>
+	<div class="form-group">
+							<label for="name" class="cols-sm-2 control-label">Comfirm Password:</label>
+							<div class="cols-sm-10">
+								<div class="input-group">
+									<span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+									<input type="password" class="form-control" name="comfirm" id="comfirm"  placeholder="Re-enter password"/>
+								</div>
+							</div>
+						</div>
+   <div class="form-group">
+							<div class="cols-sm-10">
+								<div class="input-group">
+									<input class="button" type="submit" name="submit" value="Register" /> 
+								</div>
+							</div>
+						</div>
+						<a href="login.php">Already signed up?</a>
+	</div>
+	<div class="form-group">
+	 
+  </form>
+  <div class="error"><?php echo $msg;?></div>
+
+</body>
+</html>
